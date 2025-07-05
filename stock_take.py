@@ -75,7 +75,7 @@ if stock_file:
     st.info("Enter the number of non-tallied pharma items (exclude consumables)")
     st.markdown("<span style='color: gray;'>🎯 KPI Requirement: Non-tallied items must be less than 5% of total pharma items ({:.0f}).</span>".format(total_pharma), unsafe_allow_html=True)
 
-    non_tallied_input = st.text_input("Non-Tallied Pharma Items", value="", placeholder="Enter a number")
+    non_tallied_input = st.text_input("Enter the Number of Non-Tallied Pharma Items", value="", placeholder="Enter a number")
 
     valid_input = False
     if non_tallied_input.strip() != "":
