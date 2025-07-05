@@ -78,14 +78,15 @@ if stock_file:
     non_tallied_input = st.text_input("Non-Tallied Pharma Items", value="", placeholder="Enter a number")
 
     valid_input = False
-    try:
-        non_tallied_total = int(non_tallied_input)
-        if 0 <= non_tallied_total <= total_pharma:
-            valid_input = True
-        else:
-            st.error(f"⚠️ Enter a number between 0 and {total_pharma}.")
-    except ValueError:
-        st.error("❌ Please enter a valid integer.")
+    if non_tallied_input.strip() != "":
+        try:
+            non_tallied_total = int(non_tallied_input)
+            if 0 <= non_tallied_total <= total_pharma:
+                valid_input = True
+            else:
+                st.error(f"⚠️ Enter a number between 0 and {total_pharma}.")
+        except ValueError:
+            st.error("❌ Please enter a valid integer.")
 
     if valid_input:
         non_tallied_perc = np.round((non_tallied_total / total_pharma) * 100, 2)
