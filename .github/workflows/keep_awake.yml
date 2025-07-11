@@ -9,10 +9,11 @@ jobs:
   keep-awake:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
+      - name: Checkout repo with full history
         uses: actions/checkout@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0  # <---- This is important!
 
       - name: Configure Git
         run: |
