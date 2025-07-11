@@ -20,15 +20,14 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Set remote with token and fetch
+      - name: Sync with remote and set upstream
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
-          git fetch origin
           git checkout main
-          git reset --hard origin/main
-          git branch --set-upstream-to=origin/main main  # ✅ important fix
+          git pull --rebase origin main  # ✅ REBASE, not reset
+          git branch --set-upstream-to=origin/main main
 
       - name: Make empty commit
         run: |
@@ -37,4 +36,3 @@ jobs:
       - name: Push commit
         run: |
           git push origin main
-
