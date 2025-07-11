@@ -26,7 +26,8 @@ jobs:
         run: |
           git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
           git checkout main
-          git pull --rebase origin main  # ✅ REBASE, not reset
+          git fetch origin
+          git pull --rebase origin main  # Ensure latest changes are fetched and rebased
           git branch --set-upstream-to=origin/main main
 
       - name: Make empty commit
@@ -35,4 +36,4 @@ jobs:
 
       - name: Push commit
         run: |
-          git push origin main
+          git push origin main || (git pull --rebase origin main && git push origin main)  # Retry push after rebase if it fails
