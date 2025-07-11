@@ -1,26 +1,38 @@
-name: Empty Commit
+name: Keep Streamlit Awake
 
 on:
   schedule:
-    - cron: '*/10 * * * *'  # Runs every 10 hours
+    - cron: '*/10 * * * *'  # Every 10 minutes
+  workflow_dispatch:
 
 jobs:
-  empty-commit:
+  keep-awake:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Checkout repo with full history
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
-      - name: Create empty commit
+      - name: Configure Git
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit --allow-empty -m "Empty commit to keep repository active"
-          git push 
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Set remote with token and rebase
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
+          git fetch --all
+          git rebase origin/main --autostash
+
+      - name: Make empty commit
         run: |
           git commit --allow-empty -m "Keep Streamlit awake: $(date -u)" || echo "Nothing to commit"
 
       - name: Push commit
         run: |
           git push origin HEAD:main
+
 
