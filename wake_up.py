@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import datetime
 
 STREAMLIT_APPS = [
-    "https://your-app-name.streamlit.app"  # ← Replace this
+    "https://stocktake.streamlit.app"  # ← Replace this
 ]
 
 options = Options()
