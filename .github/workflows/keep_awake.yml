@@ -15,20 +15,16 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
 
-      - name: Configure Git
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-
-      - name: Sync with remote and set upstream
+      - name: Set up Git and rebase from remote
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
-          git checkout main
           git fetch origin
-          git pull --rebase origin main  # Ensure latest changes are fetched and rebased
-          git branch --set-upstream-to=origin/main main
+          git checkout main
+          git rebase origin/main
 
       - name: Make empty commit
         run: |
@@ -36,4 +32,4 @@ jobs:
 
       - name: Push commit
         run: |
-          git push origin main || (git pull --rebase origin main && git push origin main)  # Retry push after rebase if it fails
+          git push origin main
