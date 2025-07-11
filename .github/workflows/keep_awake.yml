@@ -19,9 +19,12 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Make empty commit
+      - name: Make empty commit and push
         run: |
+          git fetch origin main
+          git rebase origin/main
           git commit --allow-empty -m "Keep Streamlit awake: $(date -u)" || echo "Nothing to commit"
+          git push origin HEAD:main
 
       - name: Push the commit
         env:
