@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Git
         run: |
@@ -19,9 +21,9 @@ jobs:
 
       - name: Make empty commit
         run: |
-          git commit --allow-empty -m "Keep Streamlit awake: $(date -u)" || echo "No changes to commit"
+          git commit --allow-empty -m "Keep Streamlit awake: $(date -u)" || echo "Nothing to commit"
 
-      - name: Push commit
+      - name: Push the commit
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
