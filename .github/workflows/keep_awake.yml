@@ -28,6 +28,7 @@ jobs:
           git fetch origin
           git checkout main
           git reset --hard origin/main
+          git branch --set-upstream-to=origin/main main  # ✅ important fix
 
       - name: Make empty commit
         run: |
@@ -36,3 +37,4 @@ jobs:
       - name: Push commit
         run: |
           git push origin main
+
