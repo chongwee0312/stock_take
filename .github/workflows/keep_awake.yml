@@ -2,8 +2,8 @@ name: Keep Streamlit Awake
 
 on:
   schedule:
-    - cron: '*/10 * * * *'  # Every 30 minutes
-  workflow_dispatch:        # Allows manual trigger
+    - cron: '*/10 * * * *'  # Every 10 minutes
+  workflow_dispatch:
 
 jobs:
   keep-awake:
@@ -19,5 +19,10 @@ jobs:
 
       - name: Make empty commit
         run: |
-          git commit --allow-empty -m "Keep Streamlit awake"
-          git push
+          git commit --allow-empty -m "Keep Streamlit awake: $(date -u)" || echo "No changes to commit"
+
+      - name: Push commit
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git push https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git HEAD:main
