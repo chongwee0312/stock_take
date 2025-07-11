@@ -12,24 +12,24 @@ jobs:
       - name: Checkout repo with full history
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Full git history is required for rebase
+          fetch-depth: 0
 
       - name: Configure Git
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Set authenticated remote
+      - name: Set remote with token and rebase
         env:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
-
-      - name: Pull, commit, and push
-        run: |
           git pull --rebase origin main
-          git commit --allow-empty -m "Keep Streamlit awake: $(date -u)" || echo "Nothing to commit"
-          git push origin HEAD:main
 
+      - name: Make empty commit
+        run: |
+          git commit --allow-empty -m "Keep Streamlit awake: $(date -u)" || echo "Nothing to commit"
+
+      - name: Push commit
         run: |
           git push origin HEAD:main
