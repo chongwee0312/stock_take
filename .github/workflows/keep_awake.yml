@@ -25,10 +25,15 @@ jobs:
         run: |
           git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}.git
 
-      - name: Pull + commit + push
-        env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Pull latest and rebase
         run: |
-          git pull --rebase --autostash origin main
+          git pull --rebase
+
+      - name: Make empty commit
+        run: |
           git commit --allow-empty -m "Keep Streamlit awake: $(date -u)" || echo "Nothing to commit"
+
+      - name: Push commit
+        run: |
           git push origin HEAD:main
+
